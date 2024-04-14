@@ -1,0 +1,23 @@
+<!-- completed_task_list.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Completed Tasks</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'todolist/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="task-container">
+            <h1>Completed Tasks</h1>
+            <hr>
+            <ul>
+                {% for task in completed_tasks %}
+                    <li>{{ task.title }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

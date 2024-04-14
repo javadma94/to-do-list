@@ -1,15 +1,55 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery library -->
+    <link rel="stylesheet" type="text/css" href="{% static 'todolist/styles.css' %}">
     <meta charset="UTF-8">
+    <script>
+$(document).ready(function() {
+    $('input[type="checkbox"]').change(function() {
+        var taskId = $(this).data('task-id');
+        $.ajax({
+            url: '{% url "complete_task" %}',
+            type: 'POST',
+            data: {
+                'task_id': taskId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data) {
+                // Remove the task from the page
+                $('#task-' + taskId).remove();
+            }
+        });
+    });
+});
+$(document).ready(function() {
+    // Function to show/hide completed tasks
+    $('#show-completed').click(function() {
+        $('.completed-task').toggle(); // Toggle the visibility of completed tasks
+    });
+});
+</script>
     <title>Task List</title>
 </head>
 <body>
-    <h1>Task List</h1>
+
+ <div class="container">
+        <div class="task-container">
+        <h1>Task List</h1>
+<hr>
     <ul>
         {% for task in tasks %}
-            <li>{{ task.title }}</li>
+{#            <li>{{ task.title }}</li>#}
+            <li id="task-{{ task.id }}">
+                    {{ task.title }}
+                    <input type="checkbox" data-task-id="{{ task.id }}">
+                </li>
         {% endfor %}
+    <button id="show-completed">Show Completed Tasks</button> <!-- Button to show completed tasks -->
+
     </ul>
+        </div>
+ </div>
 </body>
 </html>
